@@ -1,0 +1,111 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 4 0 R
+   /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> >>
+endobj
+4 0 obj
+<< /Length 2361 >>
+stream
+BT
+/F1 13 Tf
+50 760 Td
+(AFSAL S) Tj
+/F1 9 Tf
+0 -18 Td
+(Aspiring Software Engineer | First-Year CSE Student | B.Tech CSE 2025-2029) Tj
+0 -14 Td
+(Phone: +91-7907785467  |  Email: s.afsal68@gmail.com  |  Location: Trivandrum) Tj
+0 -14 Td
+(LinkedIn: linkedin.com/in/afsal-s  |  GitHub: github.com/afsal-s) Tj
+0 -20 Td
+/F1 11 Tf
+(PROFESSIONAL SUMMARY) Tj
+/F1 9 Tf
+0 -14 Td
+(Passionate first-year B.Tech CSE student with strong fundamentals in Python,) Tj
+0 -13 Td
+(JavaScript and React. Built HireTrack - a full-stack AI mock interview SaaS.) Tj
+0 -13 Td
+(Quick learner with hands-on project experience and competitive programming skills.) Tj
+0 -20 Td
+/F1 11 Tf
+(TECHNICAL SKILLS) Tj
+/F1 9 Tf
+0 -14 Td
+(Languages: Python, JavaScript, TypeScript, C, SQL) Tj
+0 -13 Td
+(Frameworks: React.js, Next.js, Node.js, Express.js, Prisma ORM) Tj
+0 -13 Td
+(Databases: PostgreSQL, MySQL, SQLite) Tj
+0 -13 Td
+(Tools: Git, Docker, VS Code, Postman, GitHub Actions) Tj
+0 -13 Td
+(Cloud: AWS \(beginner\), Vercel, Netlify) Tj
+0 -20 Td
+/F1 11 Tf
+(EDUCATION) Tj
+/F1 9 Tf
+0 -14 Td
+(B.Tech Computer Science and Engineering) Tj
+0 -13 Td
+(College of Engineering Chengannur, Kerala | 2025 - 2029 | CGPA: 8.4/10) Tj
+0 -20 Td
+/F1 11 Tf
+(PROJECTS) Tj
+/F1 9 Tf
+0 -14 Td
+(1. HireTrack - AI Mock Interview Platform \(Next.js, Prisma, Gemini AI\)) Tj
+0 -13 Td
+(   Built a full-stack SaaS for AI-driven technical interview simulation.) Tj
+0 -13 Td
+(   Integrated speech recognition, TTS, face expression analysis.) Tj
+0 -13 Td
+(   Achieved sub-2s API response time with optimised Next.js routes.) Tj
+0 -14 Td
+(2. E-Commerce Price Tracker \(Python, BeautifulSoup, Telegram Bot API\)) Tj
+0 -13 Td
+(   Scraped 500+ product pages daily, sent alerts to 120 beta users.) Tj
+0 -13 Td
+(   Reduced manual price tracking effort by 90% for regular shoppers.) Tj
+0 -20 Td
+/F1 11 Tf
+(ACHIEVEMENTS & CERTIFICATIONS) Tj
+/F1 9 Tf
+0 -14 Td
+(HackerRank Gold Badge in Python | Silver Badge in Problem Solving) Tj
+0 -13 Td
+(Completed 45 LeetCode problems \(Easy: 20, Medium: 25\)) Tj
+0 -13 Td
+(Certificate: Data Structures and Algorithms - Simplilearn \(2024\)) Tj
+0 -13 Td
+(Certificate: Python Programming - HackerRank \(2024\)) Tj
+0 -13 Td
+(Contributed to 5 open-source GitHub projects) Tj
+0 -20 Td
+/F1 11 Tf
+(LANGUAGES) Tj
+/F1 9 Tf
+0 -14 Td
+(English \(Advanced\) | Malayalam \(Native\) | Hindi \(Intermediate\)) Tj
+ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000296 00000 n 
+trailer
+<< /Size 5 /Root 1 0 R >>
+startxref
+2709
+%%EOF
