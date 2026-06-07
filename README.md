@@ -96,25 +96,7 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 
 
 
-### 3. Configure Environment Variables
 
-```bash
-cp .env.example .env
-```
-
-Open `.env` and fill in your values:
-
-```env
-# Database
-DATABASE_URL="file:./dev.db"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-here"
-
-# Google OAuth
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 # Google Gemini AI
 GEMINI_API_KEY="your-gemini-api-key"
