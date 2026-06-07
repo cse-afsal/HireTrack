@@ -92,30 +92,6 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 - **[face-api.js](https://github.com/vladmandic/face-api)** — Facial proctoring support
 - **[jsPDF](https://github.com/parallax/jsPDF)** + **[html2canvas](https://html2canvas.hertzen.com)** — Report export
 
----
-
-
-
-
-
-# Google Gemini AI
-GEMINI_API_KEY="your-gemini-api-key"
-```
-
-### 4. Set Up the Database
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-### 5. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser. 🎉
 
 ---
 
