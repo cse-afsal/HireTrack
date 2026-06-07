@@ -95,11 +95,6 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 ---
 
 
-### 2. Install Dependencies
-
-```bash
-npm install
-```
 
 ### 3. Configure Environment Variables
 
