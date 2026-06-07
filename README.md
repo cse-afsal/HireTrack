@@ -94,21 +94,6 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-Make sure you have the following installed:
-- [Node.js](https://nodejs.org) `v18+`
-- [npm](https://www.npmjs.com) `v9+`
-- A [Google AI Studio](https://aistudio.google.com) API key
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/cse-afsal/HireTrack.git
-cd HireTrack
-```
 
 ### 2. Install Dependencies
 
