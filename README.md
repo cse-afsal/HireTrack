@@ -154,11 +154,6 @@ Please follow the [Conventional Commits](https://www.conventionalcommits.org) sp
 
 ---
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgements
 
