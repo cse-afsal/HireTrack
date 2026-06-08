@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Mic, MicOff, Video, VideoOff, Volume2, VolumeX,
-  ChevronRight, Loader2, PhoneOff, CheckCircle2, AlertCircle, XCircle, Clock,
+  ChevronRight, Loader2, PhoneOff, CheckCircle2, AlertCircle, XCircle, Clock, SkipForward,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 interface Question { id: string; prompt: string; }
 interface LastFeedback {
   score: number;
-  isCorrect: "correct" | "partial" | "incorrect";
+  isCorrect: "correct" | "partial" | "incorrect" | "skipped";
   feedback: string;
 }
 const ANSWER_SECONDS = 90; // 90-second answer timer
@@ -234,7 +234,6 @@ export default function VoiceVideoInterviewPage({
     setPhase("processing");
     setStatusMsg("Evaluating your answer…");
 
-    let nextScore = 5;
     let fb: LastFeedback = { score: 5, isCorrect: "partial", feedback: "Answer recorded." };
 
     try {
@@ -244,15 +243,13 @@ export default function VoiceVideoInterviewPage({
         body: JSON.stringify({ questionId: q.id, answer: finalAnswer }),
       });
       const data = await res.json();
-      if (data.score) {
-        nextScore = data.score;
-        setScores(prev => [...prev, data.score]);
-        fb = {
-          score: data.score,
-          isCorrect: data.isCorrect ?? (data.score >= 8 ? "correct" : data.score >= 5 ? "partial" : "incorrect"),
-          feedback: data.feedback ?? "Answer saved.",
-        };
-      }
+      const awarded = data.score ?? 5;
+      setScores(prev => [...prev, awarded]);
+      fb = {
+        score: awarded,
+        isCorrect: data.isCorrect ?? (awarded >= 8 ? "correct" : awarded >= 5 ? "partial" : "incorrect"),
+        feedback: data.feedback ?? "Answer saved.",
+      };
     } catch (e) { console.warn("Answer save error", e); }
 
     // Show instant feedback for 3 seconds
@@ -272,6 +269,43 @@ export default function VoiceVideoInterviewPage({
       askQuestion(next, questions);
     }
   }, [answer, transcript, qIndex, questions, interviewId, router, askQuestion, stopTimer]);
+
+  /* ── Skip question ── */
+  const skipQuestion = useCallback(async () => {
+    if (!questions[qIndex]) return;
+    const q = questions[qIndex];
+
+    stopTimer();
+    recoRef.current?.stop();
+    window.speechSynthesis.cancel();
+    setPhase("processing");
+    setStatusMsg("Skipping question…");
+
+    try {
+      await fetch(`/api/interviews/${interviewId}/skip`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId: q.id }),
+      });
+    } catch (e) { console.warn("Skip save error", e); }
+
+    setScores(prev => [...prev, 0]);
+    setLastFeedback({ score: 0, isCorrect: "skipped", feedback: "Question skipped — no marks awarded." });
+    setPhase("feedback");
+
+    await new Promise(r => setTimeout(r, 2000));
+
+    const next = qIndex + 1;
+    if (next >= questions.length) {
+      setPhase("finished");
+      setStatusMsg("Interview complete! Generating your review…");
+      router.push(`/dashboard/interviews/${interviewId}/result`);
+    } else {
+      setLastFeedback(null);
+      setQIndex(next);
+      askQuestion(next, questions);
+    }
+  }, [qIndex, questions, interviewId, router, askQuestion, stopTimer]);
 
   /* ── Toggle controls ── */
   const toggleVideo = () => {
@@ -432,22 +466,30 @@ export default function VoiceVideoInterviewPage({
               <div className={`w-full max-w-2xl rounded-3xl p-8 border text-center transition-all ${
                 lastFeedback.isCorrect === "correct"  ? "bg-emerald-500/10 border-emerald-500/30" :
                 lastFeedback.isCorrect === "partial"   ? "bg-yellow-500/10 border-yellow-500/30" :
+                lastFeedback.isCorrect === "skipped"   ? "bg-neutral-700/40 border-neutral-600/40" :
                                                          "bg-red-500/10 border-red-500/30"
               }`}>
                 <div className="text-5xl mb-4">
-                  {lastFeedback.isCorrect === "correct" ? "✅" : lastFeedback.isCorrect === "partial" ? "⚠️" : "❌"}
+                  {lastFeedback.isCorrect === "correct"  ? "✅" :
+                   lastFeedback.isCorrect === "partial"  ? "⚠️" :
+                   lastFeedback.isCorrect === "skipped"  ? "⏭️" : "❌"}
                 </div>
                 <p className={`text-2xl font-black mb-2 ${
-                  lastFeedback.isCorrect === "correct" ? "text-emerald-400" :
-                  lastFeedback.isCorrect === "partial" ? "text-yellow-400" : "text-red-400"
+                  lastFeedback.isCorrect === "correct"  ? "text-emerald-400" :
+                  lastFeedback.isCorrect === "partial"  ? "text-yellow-400" :
+                  lastFeedback.isCorrect === "skipped"  ? "text-neutral-400" : "text-red-400"
                 }`}>
-                  {lastFeedback.isCorrect === "correct" ? "Correct!" : lastFeedback.isCorrect === "partial" ? "Partially Correct" : "Incorrect"}
+                  {lastFeedback.isCorrect === "correct"  ? "Correct! +" + lastFeedback.score + " pts" :
+                   lastFeedback.isCorrect === "partial"  ? "Partial Credit · " + lastFeedback.score + "/10" :
+                   lastFeedback.isCorrect === "skipped"  ? "Skipped" : "Incorrect · 0 pts"}
                 </p>
                 <p className="text-neutral-300 text-sm">{lastFeedback.feedback}</p>
-                <p className={`text-xs mt-3 font-bold ${
-                  lastFeedback.isCorrect === "correct" ? "text-emerald-500" :
-                  lastFeedback.isCorrect === "partial" ? "text-yellow-500" : "text-red-500"
-                }`}>Score: {lastFeedback.score}/10</p>
+                {lastFeedback.isCorrect !== "skipped" && (
+                  <p className={`text-xs mt-3 font-bold ${
+                    lastFeedback.isCorrect === "correct" ? "text-emerald-500" :
+                    lastFeedback.isCorrect === "partial" ? "text-yellow-500" : "text-red-500"
+                  }`}>Score: {lastFeedback.score}/10</p>
+                )}
               </div>
             )}
 
@@ -487,15 +529,23 @@ export default function VoiceVideoInterviewPage({
                   </p>
                 </div>
 
-                {/* Next button */}
+                {/* Action buttons: Submit answer + Skip */}
                 {phase === "listening" && (
-                  <div className="flex justify-center">
+                  <div className="flex justify-center items-center gap-3">
                     <Button
                       onClick={submitAnswer}
                       size="lg"
                       className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl text-base gap-2"
                     >
                       {qIndex < questions.length - 1 ? (<>Next Question <ChevronRight className="w-5 h-5"/></>) : (<>Finish Interview <CheckCircle2 className="w-5 h-5"/></>)}
+                    </Button>
+                    <Button
+                      onClick={skipQuestion}
+                      size="lg"
+                      variant="outline"
+                      className="border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 hover:bg-neutral-800/50 px-6 py-4 rounded-2xl text-sm gap-2"
+                    >
+                      <SkipForward className="w-4 h-4" /> Skip
                     </Button>
                   </div>
                 )}

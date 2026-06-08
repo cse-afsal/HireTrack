@@ -35,12 +35,17 @@ export async function GET(
       });
     }
 
-    // Build transcript
-    const transcript = interview.questions.map((q, i) =>
-      `Q${i+1}: ${q.prompt}\nA: ${q.userAnswer || "(no answer)"}\nScore: ${q.score ?? "?"}/10`
-    ).join("\n\n");
+    // Build transcript — mark skipped questions clearly
+    const transcript = interview.questions.map((q: any, i: number) => {
+      if (q.isSkipped) return `Q${i+1}: ${q.prompt}\nA: [SKIPPED]\nScore: 0/10`;
+      return `Q${i+1}: ${q.prompt}\nA: ${q.userAnswer || "(no answer)"}\nScore: ${q.score ?? "?"}/10`;
+    }).join("\n\n");
 
-    const avgScore = interview.questions.reduce((s, q) => s + (q.score ?? 5), 0) / (interview.questions.length || 1);
+    // Only correct/partial answers (score > 0) count toward the average.
+    // Skipped and incorrect (score === 0) contribute 0 marks but do count toward denominator.
+    const totalScore  = interview.questions.reduce((s: number, q: any) => s + (q.score ?? 0), 0);
+    const totalQs     = interview.questions.length || 1;
+    const avgScore    = totalScore / totalQs;
     const overallScore = Math.round(avgScore * 10);
 
     let reviewData = {

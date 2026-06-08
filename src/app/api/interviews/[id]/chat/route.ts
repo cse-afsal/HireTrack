@@ -46,6 +46,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     let score = Math.floor(Math.random() * 5) + 6;
     let feedback = "Good approach, but could be optimized further.";
     let nextPrompt = "Can you elaborate on your solution?";
+    let isFinalQuestion = false;
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
@@ -55,7 +56,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         orderBy: { createdAt: 'asc' }
       });
       
-      const isFinalQuestion = allQuestions.length >= 10;
+      isFinalQuestion = allQuestions.length >= 10;
 
       let conversationHistory = `You are an expert technical interviewer conducting a ${interview.difficulty} level ${interview.domain.toUpperCase().replace('_', ' ')} interview.\n`;
       if (isFinalQuestion) {

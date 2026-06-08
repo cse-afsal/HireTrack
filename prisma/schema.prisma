@@ -105,7 +105,9 @@ model Question {
   id          String  @id @default(cuid())
   interviewId String
   prompt      String
+  modelAnswer String?  // Ideal answer shown after candidate responds
   userAnswer  String?
+  isSkipped   Boolean @default(false) // Skipped questions score 0
   score       Int?
   feedback    String?
 

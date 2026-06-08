@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Send, User, Bot, Loader2 } from "lucide-react";
+import { Send, User, Bot, Loader2, SkipForward } from "lucide-react";
 
 interface Message {
   id: string;
@@ -37,7 +37,11 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isSkipping, setIsSkipping] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(
+    initialQuestions.find((q: any) => !q.userAnswer && !q.isSkipped)?.id ?? null
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -49,7 +53,7 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
   }, [messages, isTyping, isComplete]);
 
   const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+    if (!input.trim() || isTyping || isSkipping) return;
 
     const userContent = input;
     const tempId = Date.now().toString();
@@ -67,13 +71,11 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
         body: JSON.stringify({ answer: userContent }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to send message");
-      }
+      if (!res.ok) throw new Error("Failed to send message");
 
       const data = await res.json();
-      
-      // We know this succeeded. Now add the AI's response.
+
+      setCurrentQuestionId(data.nextQuestion?.id ?? null);
       setMessages((prev) => [
         ...prev,
         {
@@ -83,9 +85,7 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
         }
       ]);
 
-      if (data.isComplete) {
-        setIsComplete(true);
-      }
+      if (data.isComplete) setIsComplete(true);
 
       if (interviewType !== "chat" && "speechSynthesis" in window) {
         const utterance = new SpeechSynthesisUtterance(data.nextQuestion.prompt);
@@ -93,10 +93,50 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
       }
     } catch (error) {
       console.error(error);
-      // Revert if error
       setMessages((prev) => prev.filter(m => m.id !== `temp-${tempId}`));
     } finally {
       setIsTyping(false);
+    }
+  };
+
+  /* ── Skip current question ── */
+  const handleSkip = async () => {
+    if (!currentQuestionId || isTyping || isSkipping) return;
+    setIsSkipping(true);
+
+    // Add a visual "skipped" message to the chat
+    setMessages((prev) => [
+      ...prev,
+      { id: `skip-${Date.now()}`, role: "user", content: "⏭️ (Skipped)" },
+    ]);
+
+    try {
+      const res = await fetch(`/api/interviews/${interviewId}/skip`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId: currentQuestionId }),
+      });
+      if (!res.ok) throw new Error("Skip failed");
+
+      // Load next question via chat endpoint
+      const chatRes = await fetch(`/api/interviews/${interviewId}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer: "(skipped)", skipCurrent: true }),
+      });
+      if (chatRes.ok) {
+        const data = await chatRes.json();
+        setCurrentQuestionId(data.nextQuestion?.id ?? null);
+        setMessages((prev) => [
+          ...prev,
+          { id: `ai-${data.nextQuestion.id}`, role: "ai", content: data.nextQuestion.prompt },
+        ]);
+        if (data.isComplete) setIsComplete(true);
+      }
+    } catch (e) {
+      console.warn("Skip error:", e);
+    } finally {
+      setIsSkipping(false);
     }
   };
 
@@ -166,12 +206,22 @@ export function ChatInterface({ interviewId, initialQuestions, interviewType = "
                  rows={1}
                  style={{ height: "auto" }}
                />
-               <Button type="submit" disabled={!input.trim() || isTyping} className="h-[52px] w-[52px] rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shrink-0">
-                 <Send className="w-5 h-5" />
+               <Button type="submit" disabled={!input.trim() || isTyping || isSkipping} className="h-[52px] w-[52px] rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shrink-0">
+                 {isTyping ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                </Button>
              </form>
-             <div className="text-center mt-3">
+             <div className="flex items-center justify-between mt-3 max-w-4xl mx-auto">
                <span className="text-[10px] uppercase tracking-wider text-neutral-500 font-semibold">Press Enter to send, Shift+Enter for new line</span>
+               {currentQuestionId && (
+                 <button
+                   onClick={handleSkip}
+                   disabled={isTyping || isSkipping}
+                   className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-300 disabled:opacity-40 transition-colors"
+                 >
+                   {isSkipping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <SkipForward className="w-3.5 h-3.5" />}
+                   Skip question (0 marks)
+                 </button>
+               )}
              </div>
            </>
          )}
