@@ -155,15 +155,6 @@ Please follow the [Conventional Commits](https://www.conventionalcommits.org) sp
 ---
 
 
-## 🙏 Acknowledgements
-
-- [Google DeepMind](https://deepmind.google) for Gemini AI
-- [Vercel](https://vercel.com) for the amazing Next.js framework
-- [ShadCN](https://ui.shadcn.com) for the beautiful component library
-- [Prisma](https://prisma.io) for making database work actually enjoyable
-
----
-
 <div align="center">
 
 **Built with ❤️ by [cse-afsal](https://github.com/cse-afsal)**
