@@ -31,7 +31,7 @@
 
 **HireTrack** is a full-stack, production-ready SaaS platform that simulates real-world technical interviews using **Google Gemini AI**. Whether you're grinding DSA, prepping for system design rounds, or polishing your HR answers — HireTrack is your 24/7 AI interviewer that never gets tired, never judges, and always gives you honest feedback.
 
-Stop doing mock interviews with friends who don't know what they're talking about. **Interview with AI. Get hired for real.**
+Stop doing mock interviews with friends who don't know what they're talking about. **Interview with AI. Get hired for real .**
 
 ---
 
