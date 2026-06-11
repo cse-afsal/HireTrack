@@ -62,7 +62,7 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 │   🏗️  System Design →  HLD, LLD, Scalability, DBs...     │
 │   🤝 HR            →  Behavioural, Culture Fit...        │
 │                                                          │
-│   Difficulty:  🟢 Easy   🟡 Medium   🔴 Hard             │
+│   Difficulty:  🟢 Easy   🟡 Medium   🔴 Hard            │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
