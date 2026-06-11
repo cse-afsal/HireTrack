@@ -43,7 +43,7 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 | 💻 **Monaco Code Editor** | VS Code-like environment with Java, Python & C++ support |
 | 📊 **Instant AI Feedback** | Score, strengths, weaknesses & improvement roadmap per answer |
 | 📄 **Resume Parsing** | Upload your PDF resume; AI generates personalized questions |
-| 🎭 **Multi-Domain Support** | DSA · Web Dev · ML · System Design · HR |
+| 🎭 **Multi-Domain Support** | DSA · Web Dev · ML · System Design · HR  |
 | 📈 **Performance Dashboard** | Track progress over time with detailed analytics |
 | 🔐 **Auth System** | Google OAuth + Email/Password via NextAuth.js |
 | 🌙 **Dark / Light Mode** | Eye-friendly UI with smooth Framer Motion animations |
