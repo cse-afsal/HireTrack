@@ -59,8 +59,8 @@ Stop doing mock interviews with friends who don't know what they're talking abou
 │   🧩 DSA          →  Arrays, Trees, DP, Graphs...        │
 │   🌐 Web Dev       →  React, APIs, CSS, Optimization...  │
 │   🤖 ML / AI       →  Models, Math, PyTorch, CNNs...     │
-│   🏗️  System Design →  HLD, LLD, Scalability, DBs...      │
-│   🤝 HR            →  Behavioural, Culture Fit...         │
+│   🏗️  System Design →  HLD, LLD, Scalability, DBs...     │
+│   🤝 HR            →  Behavioural, Culture Fit...        │
 │                                                          │
 │   Difficulty:  🟢 Easy   🟡 Medium   🔴 Hard             │
 │                                                          │
