@@ -21,7 +21,7 @@
 
 <br/>
 
-> *"Practice like you've never won. Perform like you've never lost."*
+> *"Practice like you've never won. Perform like you've never lost ."*
 
 </div>
 
